@@ -135,31 +135,63 @@ function scrollActive() {
 
 (function () {
   // certificate read more toggle (auto hide cards > 8)
-  const certSection = document.getElementById('certificate');
-  const certGrid = document.getElementById('certificateGrid');
-  const certToggle = document.getElementById('certToggle');
+  const certSection = document.getElementById("certificate");
+  const certGrid = document.getElementById("certificateGrid");
+  const certToggle = document.getElementById("certToggle");
 
   if (certGrid && certSection && certToggle) {
-    const cards = Array.from(certGrid.querySelectorAll('.cert-card'));
+    const cards = Array.from(certGrid.querySelectorAll(".cert-card"));
     const VISIBLE = 8; // จำนวนแรกที่ให้โชว์
     if (cards.length > VISIBLE) {
       // เพิ่ม class extra ให้การ์ดที่เกิน
       cards.forEach((card, i) => {
-        if (i >= VISIBLE) card.classList.add('extra');
+        if (i >= VISIBLE) card.classList.add("extra");
       });
       // แสดงปุ่ม Read more
-      certToggle.style.display = 'inline-block';
-      certToggle.addEventListener('click', () => {
-        const expanded = certSection.classList.toggle('expanded');
-        certToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        certToggle.textContent = expanded ? 'Show less' : 'Read more';
-        if (expanded) certSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      certToggle.style.display = "inline-block";
+      certToggle.addEventListener("click", () => {
+        const expanded = certSection.classList.toggle("expanded");
+        certToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+        certToggle.textContent = expanded ? "Show less" : "Read more";
+        if (expanded)
+          certSection.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     } else {
       // ไม่มีการ์ดเกิน 8 ก็ซ่อนปุ่ม
-      certToggle.style.display = 'none';
+      certToggle.style.display = "none";
     }
   }
 })();
+
+const popup = document.getElementById("certPopup");
+const popupImg = document.getElementById("popupImage");
+const popupTitle = document.getElementById("popupTitle");
+const popupDesc = document.getElementById("popupDesc");
+const closeBtn = document.querySelector(".popup-close");
+
+// หา card ทุกใบ
+document.querySelectorAll(".cert-card").forEach((card) => {
+  card.addEventListener("click", () => {
+    const img = card.querySelector("img").src;
+    const title = card.querySelector("h3").innerText;
+    const desc = card.querySelector("p").innerText;
+
+    popupImg.src = img;
+    popupTitle.innerText = title;
+    popupDesc.innerText = desc;
+
+    popup.style.display = "flex";
+  });
+});
+
+// ปิด popup
+closeBtn.addEventListener("click", () => {
+  popup.style.display = "none";
+});
+
+// คลิกนอกกล่อง → ปิด popup
+popup.addEventListener("click", (e) => {
+  if (e.target === popup) popup.style.display = "none";
+});
 
 window.addEventListener("scroll", scrollActive);
